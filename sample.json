@@ -1,0 +1,13 @@
+{
+    
+    "name": "Wireless Bluetooth Headphones",
+    "description": "High-quality wireless Bluetooth headphones with noise cancellation and long battery life.",
+    "price": 79.99,
+    "category": "Topwear",
+    "type":"shirts",
+    "brand": "SoundMagic",
+    "image":"https://example.com/images/product1.jpg",
+    "color":"black",
+    "gender":"men"
+          
+  }

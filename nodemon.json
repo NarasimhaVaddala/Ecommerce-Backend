@@ -1,0 +1,25 @@
+{
+  "watch": [
+    "controllers/**/*",
+    "modals/**/*",
+    "routes/**/*",
+    "middleware/**/*"
+  ],
+  "ignore": [
+    "node_modules",
+    "dist",
+    "**/.git/**",
+    "**/.nyc_output/**",
+    "**/.sass-cache/**",
+    "**/bower_components/**",
+    "**/coverage/**"
+  ],
+  "delay": "2.0",
+  "legacyWatch": true,
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "execMap": {
+    "js": "node"
+  }
+}
