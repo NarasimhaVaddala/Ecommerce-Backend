@@ -14,8 +14,8 @@ app.get('/' , (req,res)=>{
     return res.send("<h1>Hello</h1>")
 })
 
-app.use('/products' , require('./routes/productsRoute'))
-app.use('/auth' , require('./routes/Auth'))
+app.use('/api/products' , require('./routes/productsRoute'))
+app.use('/api/auth' , require('./routes/Auth'))
 
 
 app.listen(3000 , ()=>{
