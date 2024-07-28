@@ -47,16 +47,14 @@ router.get('/:gender/:category/:type', async (req, res) => {
 });
 
 
+
 //================ Cart Operations  =================
 
 router.post('/cart', isLogin, async (req, res) => {
+  console.log(req.user);
   try {
-    const { productId, quantity, size } = req.body;
-    
+    const { productId, quantity, size } = req.body;    
     const user = await userModal.findById(req.user);
-
-
-
     const itemIndex = user.cart.findIndex(item => item.productId.toString() === productId && item.size === size);
     if (itemIndex > -1) {
       user.cart[itemIndex].quantity += quantity;
@@ -144,17 +142,14 @@ router.delete('/cart/delete', isLogin, async (req, res) => {
   }
 });
 
-
 //================ Cart Operations  =================
 
 
 
 
-//================ WishList Operations Operations  =================
-
+//================ WishList Operations  =================
 // Add item to wishlist
 
-// Add item to wishlist
 router.post('/wishlist', isLogin, async (req, res) => {
 
   console.log(req.user);
@@ -212,8 +207,6 @@ router.delete('/wishlist', isLogin, async (req, res) => {
   }
 });
 
-
-
 // Get wishlist
 router.get('/wishlist', isLogin, async (req, res) => {
   try {
@@ -228,11 +221,9 @@ router.get('/wishlist', isLogin, async (req, res) => {
     return res.status(500).send({ success: false, error: error.message });
   }
 });
+//================ WishList Operations  =================
 
 
-
-
-//================ WishList Operations Operations  =================
 
 
 

@@ -13,7 +13,18 @@ const WishItemSchema = new mongoose.Schema({
     productId: { type: mongoose.Schema.Types.ObjectId, ref: 'product' },
 })  
 
+const addressSchema = new mongoose.Schema({
+    pincode:{
+        type:String,
+        required:true
+    },
+    addr:{
+        type:String,
+        required:true
+    }
 
+    
+})
 
 
 const userSchema = mongoose.Schema({
@@ -40,8 +51,8 @@ const userSchema = mongoose.Schema({
         unique:true
     },
     address:{
-        type:Array,
-        default:[]
+        type:[addressSchema],
+        default:{}
     },
     cart: [CartItemSchema],
     wishlist:[WishItemSchema]

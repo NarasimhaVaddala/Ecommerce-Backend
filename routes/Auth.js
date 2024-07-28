@@ -8,7 +8,6 @@ const bcrypt = require('bcryptjs')
 const secret = "@20211067766515042001@Amdr53600"
 
 
-
 const genHash = (password)=>{
 
     try {

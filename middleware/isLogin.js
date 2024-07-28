@@ -5,7 +5,7 @@ const isLogin = (req,res,next) => {
   
   const token = req.header("token");
 
-  
+  console.log(token);
   if (!token)
     return res.status(401).send({ success: false, error: "Invalid credentials" });
 

@@ -16,6 +16,7 @@ app.get('/' , (req,res)=>{
 
 app.use('/products' , require('./routes/productsRoute'))
 app.use('/auth' , require('./routes/Auth'))
+app.use('/user' , require('./routes/userRoute'))
 
 
 app.listen(3000 , ()=>{
