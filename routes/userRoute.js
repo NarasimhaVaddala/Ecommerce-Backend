@@ -55,7 +55,7 @@ router.post('/placeorder', isLogin, async(req,res)=>{
 router.put('/edituser' , isLogin , async(req,res)=>{
     try {
 
-        const {first_name , last_name , mobile , address} = req.body;       
+        // const {first_name , last_name , mobile , address} = req.body;       
 
         const user = await userModel.findOneAndUpdate(
             { _id: req.user },
