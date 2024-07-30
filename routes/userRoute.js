@@ -4,46 +4,62 @@ const router = express.Router()
 const userModel = require('../modals/user')
 //=================== Order Operations ========================
 
-router.post('/placeorder', isLogin, async(req,res)=>{
-
-    const cartData = await userModel.findOne({_id:req.user}).populate('cart.productId')
-    let newda = cartData.cart;
-    let PriceforItems = 0;
-    let totalprice = 0;
-    let deliveryfee = 49;
-    let packagingfee = 59;
-
-    console.log(newda);
-
-    PriceforItems = newda.reduce((acc , cur)=>{
-        return acc + cur.productId.price * cur.quantity;
-
-    },0)
-
-    if (PriceforItems > 499) {
-        deliveryfee = 0;
-        totalprice = PriceforItems + packagingfee;
+router.post('/order', isLogin, async (req, res) => {
+    try {
+      // Fetch user data
+      const user = await userModel.findOne({ _id: req.user }).populate('cart.productId');
+      if (!user) {
+        return res.status(404).send({ success: false, message: "User not found" });
+      }
+  
+      // Get cart data and calculate price
+      let cartData = user.cart;
+      let price = calculatePrice(cartData);
+      let address = user.address;
+      let status = "pending";
+  
+      // Create new order
+      let newOrder = {
+        items: cartData.map(item => ({
+          productId: item.productId._id,
+          quantity: item.quantity,
+          size: item.size
+        })),
+        status: status
+      };
+  
+      // Add new order to user's orders
+      user.orders.push(newOrder);
+  
+      // Clear the cart
+      user.cart = [];
+  
+      // Save user data
+      await user.save();
+  
+      return res.status(200).send({ success: true, data: { price, orders: user.orders } });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send({ success: false, message: "Internal Server Error" });
     }
-    else{
-        totalprice = PriceforItems + (deliveryfee + packagingfee);
+  });
+
+
+
+router.get('/order', isLogin, async (req, res) => {
+    try {
+      // Fetch user data and populate order items
+      const user = await userModel.findOne({ _id: req.user }).populate('orders.items.productId');
+      if (!user) {
+        return res.status(404).send({ success: false, message: "User not found" });
+      }
+  
+      return res.status(200).send({ success: true, data: user.orders });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send({ success: false, message: "Internal Server Error" });
     }
-
-    let priceData = {
-        totalprice,
-        PriceforItems,
-        deliveryfee,
-        packagingfee,
-        newda
-    }
-
-    console.log(priceData);
-    return res.status(200).send({pricedata:priceData})
-
-
-    
-
-    return res.status(200).send({data: cartData.cart})
-})
+  });
 
 //=================== Order Operations ========================
 
@@ -96,7 +112,36 @@ router.get('/getuser' , isLogin , async(req,res)=>{
 
 
 
-
+function calculatePrice(arr) {
+    if (!arr) {
+      return;
+    } else {
+      
+      // console.log("arr" , arr);
+      
+      
+      const priceForItems = arr.reduce((acc, item) => {
+        
+        return acc + (item.productId.price * item.quantity)}, 0);
+  
+      let totalPrice = 0;
+      let packagingFee = 59;
+      let deliveryCharges = 0;
+  
+      if (priceForItems >= 499) {
+        deliveryCharges = 0;
+        totalPrice = priceForItems + packagingFee + deliveryCharges;
+        // console.log(totalPrice, priceForItems, packagingFee, deliveryCharges);
+        return { totalPrice, priceForItems, packagingFee, deliveryCharges };
+      } else {
+        deliveryCharges = 49;
+        totalPrice = priceForItems + packagingFee + deliveryCharges;
+        // console.log(totalPrice, priceForItems, packagingFee, deliveryCharges);
+        return { totalPrice, priceForItems, packagingFee, deliveryCharges };
+      }
+    }
+  }
+  
 
 
 module.exports = router;
